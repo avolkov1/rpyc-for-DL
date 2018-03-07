@@ -107,7 +107,7 @@ This would be a potential future improvement.
 
 ### INSTALL
 
-For convenience there is a `setup.py` so can install the `rpycdl_lib` with its
+For convenience there is a `setup.py` to install the `rpycdl_lib` with its
 dependencies via:
 ```
 pip install -e .
@@ -172,7 +172,7 @@ At this point a client can be launched that uses the "tensorflow" or
 "tensorflow-1.4.0" service. Modify the examples to suite your needs.
 
 Neither the registry nor the client code has to run on a GPU server, but they
-should have visibility on the network to the server. Refer to RPyC official
+need to have visibility on the network to the server. Refer to RPyC official
 documenation for further details.
 
 Refer to the startup script for reference
@@ -220,7 +220,7 @@ section for details.
     databases.
 
     This example does the same thing as `run_caffe_mnist.sh` script, but
-    partially using python API as well. The training is done via cli usig
+    partially using python API as well. The training is done via cli using
     subprocess to invoke the caffe cli. NVCaffe does not expose multigpu
     managing via python, only via C++:<br/>
     [https://github.com/NVIDIA/caffe/blob/caffe-0.16/docs/multigpu.md](https://github.com/NVIDIA/caffe/blob/caffe-0.16/docs/multigpu.md)
@@ -250,15 +250,14 @@ section for details.
     python API to run multi-gpu Caffe training. 
     Running python's `multiprocessing.Process` module directly within rpyc does
     not seem to be reliable. Such an approach sometimes runs and other times
-    fails randomly.
-
-    A more reliable approach is to have the client code invoke the multigpu
-    Python code via subprocess similarly to how it's done in NVCaffe case.
+    fails randomly. A more reliable approach is to have the client code invoke
+    the multigpu Python code via subprocess similarly to how it's done in
+    NVCaffe case.
 
     The non-reliable code is demonstrated in the function `cfclient_mnist_code`
     and the reliable approach is shown in function `cfclient_mnist_code_spawn`.
     Only the reliable approach is used. If you would like to run/test unreliable
-    approach uncomment that portion of the code.
+    approach uncomment that portion of the code in the `main` routine.
 
 * [`dlrpyc_server.py`](rpyc_DL/dlrpyc_server.py)
 
@@ -305,7 +304,7 @@ brineable by RPyC's definition.<br/>
 [https://rpyc.readthedocs.io/en/latest/api/core_brine.html#api-brine](https://rpyc.readthedocs.io/en/latest/api/core_brine.html#api-brine)<br/>
 If `code_args` has public attributes the client needs to connect with that option:
 ```
-config_default = {'allow_public_attrs': True}
+config = {'allow_public_attrs': True}
 cserv = rpyc.connect_by_service(sevice_name, config=config)
 ```
 
@@ -326,7 +325,7 @@ corresponding to the locked GPUs. Then the client code runs. Once the client
 code completes the lock files for the GPUs are released.
 
 Per the logic above only one service at any given time can attempt to acquire
-GPUs on a system as the other attempts will bloc on the syslock. The service
+GPUs on a system as the other attempts will block on the syslock. The service
 trying to lock the GPUs will loop until enough GPUs become available waiting on
 a previous service to complete and releas its GPUs. Say service request A is
 using 2 GPUs, 0 and 1, on a system with 4 GPUs (0, 1, 2, 3). The next service B
