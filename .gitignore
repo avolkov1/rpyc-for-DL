@@ -1,0 +1,3 @@
+*.pyc
+rpyc_DL/__init__.py
+rpyc_DL/rpycdl_lib.egg-info
